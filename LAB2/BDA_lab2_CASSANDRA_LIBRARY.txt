@@ -1,0 +1,55 @@
+1.Create a keyspace by name Library
+--------------------------------------
+CREATE KEYSPACE library WITH REPLICATION={ 'class' : 'SimpleStrategy',
+'replication_factor' : 1};
+USE library;
+
+
+2. Create a column family by name Library-Info with attributes
+Stud_Id Primary Key,
+Counter_value of type Counter,
+Stud_Name, Book-Name, Book-Id, Date_of_issue
+--------------------------------------------------------------
+create table library_info(stud_id int, counter_value Counter, stud_name
+text,book_name text, date_of_issue timestamp, book_id int, PRIMARY
+KEY(stud_id,stud_name,book_name,date_of_issue,book_id));
+
+
+3. Insert the values into the table in batch
+----------------------------------------------
+UPDATE library_info SET counter_value = counter_value + 1 WHERE stud_id
+= 111 and stud_name = 'USER1' and book_name = 'ML' and date_of_issue =
+'2020-10-11'and book_id = 200;
+UPDATE library_info SET counter_value = counter_value + 1 WHERE stud_id
+= 112 and stud_name = 'USER2' and book_name = 'BDA' and date_of_issue =
+'2020-09-21'and book_id = 300;
+UPDATE library_info SET counter_value = counter_value + 1 WHERE
+stud_id = 113 and stud_name = 'USER3' and book_name = 'OOMD' and
+date_of_issue = '2020-04-01'and book_id = 400;
+SELECT * FROM library_info;
+
+4. Display the details of the table created and increase the value of the counter
+-----------------------------------------------------------------------------------
+UPDATE library_info SET counter_value = counter_value + 1 WHERE stud_id
+= 112 and stud_name = 'SHAAN' and book_name = 'BDA' and date_of_issue =
+'2020-09-21'and book_id = 300;
+
+
+5. Write a query to show that a student with id 112 has taken a book “BDA” 2times.
+---------------------------------------------------------------------------------------
+SELECT * FROM library_info WHERE stud_id = 112;
+
+6. Export the created column to a csv file
+------------------------------------------
+COPY
+Library_Info(Stud_Id,Stud_Name,Book_Name,Book_Id,Date_Of_Issue,Counter_val
+ue) TO 'e:\libraryInfo.csv';
+
+7. Import a given csv dataset from local file system into Cassandra column family
+--------------------------------------------------------------------------------s
+create table library_info2(stud_id int, counter_value Counter, stud_name
+text,book_name text, date_of_issue timestamp, book_id int, PRIMARY
+KEY(stud_id,stud_name,book_name,date_of_issue,book_id));
+COPY
+library_info2(stud_id,stud_name,book_name,book_id,date_of_issue,counter
+_value) FROM 'e:\libraryInfo.csv'

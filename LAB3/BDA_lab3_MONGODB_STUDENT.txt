@@ -4,25 +4,20 @@ test
 admin   0.000GB
 config  0.000GB
 local   0.000GB
+
+1) Create Database
+-------------------
 > use Student
 switched to db Student
-> db.createCollection(StudenInfo)
-uncaught exception: ReferenceError: StudenInfo is not defined :
-@(shell):1:1
+
+
+2)Create Collection 
+-----------------------
 > db.createCollection("StudenInfo")
 { "ok" : 1 }
-> db.insertMany([])
-uncaught exception: TypeError: db.insertMany is not a function :
-@(shell):1:1
-> db.insertMany(
-... [
-... {rollno:1,age:20,contact:1234543,emailid:"saakshi@gmail.com"},
-... {rollno:1,age:21,contact:5678678,emailid:"khushi@gmail.com"},
-... {rollno:2,age:22,contact:1345342,emailid:"email2@gmail.com"}
-... ]
-... )
-uncaught exception: TypeError: db.insertMany is not a function :
-@(shell):1:1
+
+3)Insert in Collections
+------------------------
 > db.StudentInfo.insertMany( [ {rollno:1,age:20,contact:1234543,emailid:"saakshi@gmail.com"}, {rollno:3,age:21,contact:5678678,emailid:"khushi@gmail.com"}, {rollno:2,age:22,contact:1345342,emailid:"email2@gmail.com"} ] )
 {
         "acknowledged" : true,
@@ -38,6 +33,10 @@ uncaught exception: TypeError: db.insertMany is not a function :
 { "_id" : ObjectId("606abe75313d5d50a08a0f86"), "rollno" : 2, "age" : 22, "contact" : 1345342, "emailid" : "email2@gmail.com" }
 > db.StudentInfo.find({rollno:1})
 { "_id" : ObjectId("606abe75313d5d50a08a0f84"), "rollno" : 1, "age" : 20, "contact" : 1234543, "emailid" : "saakshi@gmail.com" }
+
+
+4)Update email
+----------------
 > db.StudentInfo.update(
 ... {rollno:1},
 ... {$set:{emailid:"changed@gmail.com"}}
@@ -45,4 +44,36 @@ uncaught exception: TypeError: db.insertMany is not a function :
 WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
 > db.StudentInfo.find({rollno:1})
 { "_id" : ObjectId("606abe75313d5d50a08a0f84"), "rollno" : 1, "age" : 20, "contact" : 1234543, "emailid" : "changed@gmail.com" }
+
+
+
+5)Export
+---------
+C:\Program Files\MongoDB\Server\4.4\bin>mongoexport --db=Student --collection=Student --out \Exported\Student.json
+2021-05-22T11:50:47.589+0530    connected to: mongodb://localhost/
+2021-05-22T11:50:47.624+0530    exported 5 records
+
+
+6)Drop
+--------
+> use Student
+switched to db Student
+> db.Student.drop()
+true
+
+7)Import
+----------
+C:\Program Files\MongoDB\Server\4.4\bin>mongoimport --db=Student --collection=Student \Exported\Student.json
+2021-05-22T11:52:26.931+0530    connected to: mongodb://localhost/
+2021-05-22T11:52:27.128+0530    5 document(s) imported successfully. 0 document(s) failed to import.
+
+
+> use Student
+switched to db Student
+> db.Student.find({})
+{ "_id" : ObjectId("60a88767e8079f291cfba02f"), "name" : "user3", "usn" : "usn3", "age" : 20, "contact" : 12347, "email" : "user3@gmail.com", "cgpa" : 9.7 }
+{ "_id" : ObjectId("60a88767e8079f291cfba02e"), "name" : "user2", "usn" : "usn2", "age" : 20, "contact" : 12346, "email" : "user2@gmail.com", "cgpa" : 9.6 }
+{ "_id" : ObjectId("60a88767e8079f291cfba030"), "name" : "user4", "usn" : "usn4", "age" : 20, "contact" : 12348, "email" : "user4@gmail.com", "cgpa" : 9.8 }
+{ "_id" : ObjectId("60a8869de8079f291cfba02c"), "name" : "Saakshi", "usn" : "1BM18CS088", "age" : 20, "contact" : 12345, "email" : "saakshi@gmail.com", "cgpa" : 9.4 }
+{ "_id" : ObjectId("60a88767e8079f291cfba02d"), "name" : "newuser1", "usn" : "usn1", "age" : 20, "contact" : 12345, "email" : "newuser1@gmail.com", "cgpa" : 9.5 }
 >
